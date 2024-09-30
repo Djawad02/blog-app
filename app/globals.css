@@ -16,8 +16,15 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
-@layer base{
-  h1{
-    @apply font-extrabold text-2xl mb-3
+@layer base {
+  h1 {
+    @apply font-extrabold text-2xl mb-3;
+  }
+
+  .input-text {
+    @apply mt-1 block w-60 px-3 py-2 bg-red-200 border-slate-300 rounded-full text-sm shadow-sm placeholder-slate-400;
+    @apply focus outline-none focus border-sky-200 focus ring-1 focus ring-sky-200
   }
 }
+
+
