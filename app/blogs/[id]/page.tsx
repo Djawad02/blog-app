@@ -3,6 +3,7 @@ import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import React from "react";
 import blogImage from "../../../public/nextJs.png";
+import Footer from "@/app/components/Footer";
 
 const IndividualBlog = () => {
   return (
@@ -59,6 +60,7 @@ const IndividualBlog = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 };
