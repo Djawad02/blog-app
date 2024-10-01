@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import blogImage from "../../../public/nextJs.png";
 import Footer from "@/app/components/Footer";
+import RelatedSection from "@/app/components/RelatedSection";
 
 const IndividualBlog = () => {
   return (
@@ -59,6 +60,7 @@ const IndividualBlog = () => {
             </p>
           </div>
         </div>
+        <RelatedSection />
       </section>
       <Footer />
     </main>
