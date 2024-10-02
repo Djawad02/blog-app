@@ -15,3 +15,6 @@ const tagSchema = z.object({
   
   authorId: z.number().int().nonnegative("Author ID must be a positive integer").optional(),
 });
+
+
+export default tagSchema;
