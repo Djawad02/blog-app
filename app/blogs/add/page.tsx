@@ -1,7 +1,5 @@
 "use client";
-import Footer from "@/app/components/Footer";
 import BlogForm from "@/app/components/BlogForm";
-import Navbar from "@/app/components/Navbar";
 import React from "react";
 
 const AddBlogPage = () => {
@@ -39,13 +37,11 @@ const AddBlogPage = () => {
 
   return (
     <>
-      <Navbar />
       <BlogForm
         title="Add New Blog Post"
         onSubmit={handleAddBlog}
         authorId={authorId}
       />
-      <Footer />
     </>
   );
 };

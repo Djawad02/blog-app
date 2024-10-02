@@ -1,6 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer";
-import Navbar from "@/app/components/Navbar";
 import React, { useState } from "react";
 
 const DeleteBlogPage = () => {
@@ -34,7 +32,6 @@ const DeleteBlogPage = () => {
 
   return (
     <>
-      <Navbar />
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white shadow-md rounded-lg p-6 w-96">
           <h1 className="text-xl font-semibold text-center mb-4">
@@ -65,7 +62,6 @@ const DeleteBlogPage = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

@@ -1,7 +1,6 @@
 "use client";
-import Footer from "@/app/components/Footer";
-import CategoryTagForm from "@/app/components/Form"; // You may want to rename this component if you're using it for tags as well.
-import Navbar from "@/app/components/Navbar";
+import CategoryTagForm from "@/app/components/Form";
+
 import React from "react";
 
 const AddTagPage = () => {
@@ -34,16 +33,12 @@ const AddTagPage = () => {
   ];
 
   return (
-    <>
-      <Navbar />
-      <CategoryTagForm
-        title="Add New Tag"
-        onSubmit={handleAddTag}
-        authorId={authorId}
-        blogs={blogs} // Pass the blogs array to the form
-      />
-      <Footer />
-    </>
+    <CategoryTagForm
+      title="Add New Tag"
+      onSubmit={handleAddTag}
+      authorId={authorId}
+      blogs={blogs} // Pass the blogs array to the form
+    />
   );
 };
 

@@ -3,7 +3,7 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <header className="bg-red-300">
+    <div className="bg-red-300">
       <div className="xl:container xl:mx-auto flex flex-col items-center sm:flex-row sm:justify-between text-center py-3">
         {/* Left Side: Logo */}
         <div className="flex order-1">
@@ -43,7 +43,7 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-    </header>
+    </div>
   );
 };
 

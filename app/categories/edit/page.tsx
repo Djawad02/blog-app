@@ -1,6 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer";
-import Navbar from "@/app/components/Navbar";
 import React, { useState } from "react";
 
 const EditCategoryPage = () => {
@@ -41,50 +39,46 @@ const EditCategoryPage = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white shadow-md rounded-lg p-6 w-96">
-          <h1 className="text-xl font-semibold text-center mb-4">
-            Edit Category
-          </h1>
-          <form onSubmit={handleEditCategory}>
-            <select
-              value={selectedCategoryId}
-              onChange={handleSelectCategory}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              required
-            >
-              <option value="" disabled>
-                Select a category to edit
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-6 w-96">
+        <h1 className="text-xl font-semibold text-center mb-4">
+          Edit Category
+        </h1>
+        <form onSubmit={handleEditCategory}>
+          <select
+            value={selectedCategoryId}
+            onChange={handleSelectCategory}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="" disabled>
+              Select a category to edit
+            </option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+            ))}
+          </select>
 
-            <input
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Category Name"
-              className="w-full mt-4 p-2 border border-gray-300 rounded-md"
-              required
-            />
+          <input
+            type="text"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            placeholder="Category Name"
+            className="w-full mt-4 p-2 border border-gray-300 rounded-md"
+            required
+          />
 
-            <button
-              type="submit"
-              className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
-            >
-              Update Category
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
+          >
+            Update Category
+          </button>
+        </form>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

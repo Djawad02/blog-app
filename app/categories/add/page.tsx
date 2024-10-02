@@ -1,7 +1,5 @@
 "use client";
-import Footer from "@/app/components/Footer";
 import CategoryTagForm from "@/app/components/Form";
-import Navbar from "@/app/components/Navbar";
 import React from "react";
 
 const AddCategoryPage = () => {
@@ -32,16 +30,12 @@ const AddCategoryPage = () => {
   ];
 
   return (
-    <>
-      <Navbar />
-      <CategoryTagForm
-        title="Add New Category"
-        onSubmit={handleAddCategory}
-        authorId={authorId}
-        blogs={blogs} // Ensure blogs are passed
-      />
-      <Footer />
-    </>
+    <CategoryTagForm
+      title="Add New Category"
+      onSubmit={handleAddCategory}
+      authorId={authorId}
+      blogs={blogs} // Ensure blogs are passed
+    />
   );
 };
 

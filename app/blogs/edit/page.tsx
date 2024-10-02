@@ -1,6 +1,4 @@
 "use client";
-import Footer from "@/app/components/Footer";
-import Navbar from "@/app/components/Navbar";
 import React, { useState } from "react";
 
 const EditBlogPage = () => {
@@ -62,64 +60,60 @@ const EditBlogPage = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white shadow-md rounded-lg p-6 w-96">
-          <h1 className="text-xl font-semibold text-center mb-4">Edit Blog</h1>
-          <form onSubmit={handleEditBlog}>
-            <select
-              value={selectedBlogId}
-              onChange={handleSelectBlog}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              required
-            >
-              <option value="" disabled>
-                Select a blog to edit
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg p-6 w-96">
+        <h1 className="text-xl font-semibold text-center mb-4">Edit Blog</h1>
+        <form onSubmit={handleEditBlog}>
+          <select
+            value={selectedBlogId}
+            onChange={handleSelectBlog}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            required
+          >
+            <option value="" disabled>
+              Select a blog to edit
+            </option>
+            {blogs.map((blog) => (
+              <option key={blog.id} value={blog.id}>
+                {blog.title}
               </option>
-              {blogs.map((blog) => (
-                <option key={blog.id} value={blog.id}>
-                  {blog.title}
-                </option>
-              ))}
-            </select>
+            ))}
+          </select>
 
-            <input
-              type="text"
-              value={blogTitle}
-              onChange={(e) => setBlogTitle(e.target.value)}
-              placeholder="Blog Title"
-              className="w-full mt-4 p-2 border border-gray-300 rounded-md"
-              required
-            />
+          <input
+            type="text"
+            value={blogTitle}
+            onChange={(e) => setBlogTitle(e.target.value)}
+            placeholder="Blog Title"
+            className="w-full mt-4 p-2 border border-gray-300 rounded-md"
+            required
+          />
 
-            <textarea
-              value={blogContent}
-              onChange={(e) => setBlogContent(e.target.value)}
-              placeholder="Blog Content"
-              className="w-full mt-4 p-2 border border-gray-300 rounded-md"
-              required
-            ></textarea>
+          <textarea
+            value={blogContent}
+            onChange={(e) => setBlogContent(e.target.value)}
+            placeholder="Blog Content"
+            className="w-full mt-4 p-2 border border-gray-300 rounded-md"
+            required
+          ></textarea>
 
-            <input
-              type="text"
-              value={blogImagePath}
-              onChange={(e) => setBlogImagePath(e.target.value)}
-              placeholder="Image Path"
-              className="w-full mt-4 p-2 border border-gray-300 rounded-md"
-            />
+          <input
+            type="text"
+            value={blogImagePath}
+            onChange={(e) => setBlogImagePath(e.target.value)}
+            placeholder="Image Path"
+            className="w-full mt-4 p-2 border border-gray-300 rounded-md"
+          />
 
-            <button
-              type="submit"
-              className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
-            >
-              Update Blog
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
+          >
+            Update Blog
+          </button>
+        </form>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

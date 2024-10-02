@@ -1,10 +1,8 @@
 "use client";
 import Author from "@/app/components/Author";
-import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import blogImagePlaceholder from "../../../public/images/nextJs.png";
-import Footer from "@/app/components/Footer";
 import RelatedSection from "@/app/components/RelatedSection";
 import { useParams } from "next/navigation";
 
@@ -39,7 +37,6 @@ const IndividualBlog = () => {
 
   return (
     <main>
-      <Navbar />
       <section className="container mx-auto md:px-2 py-16 w-1/2">
         <div className="flex justify-center">
           <Author />
@@ -65,7 +62,6 @@ const IndividualBlog = () => {
         </div>
         <RelatedSection />
       </section>
-      <Footer />
     </main>
   );
 };
