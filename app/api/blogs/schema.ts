@@ -14,10 +14,4 @@ const blogSchema = z.object({
   }),
 });
 
-export const blogUpdateSchema = blogSchema.extend({
-  id: z.number().int().nonnegative("Blog ID must be a positive integer"),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-});
-
 export default blogSchema;
