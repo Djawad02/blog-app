@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import Author from "./Author";
-import blogImage from "../../public/coffee.jpg";
+import blogImage from "../../public/images/blog.jpg";
 
 const RelatedSection = () => {
   return (

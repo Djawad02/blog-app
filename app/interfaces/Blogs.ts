@@ -5,7 +5,7 @@ interface PostType {
     authorId: number;
     createdAt: string;
     updatedAt: string;
-    image_path:string
+    imagePath:string
 }
   
 interface PostProps {

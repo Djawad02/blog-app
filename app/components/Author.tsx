@@ -1,5 +1,5 @@
 import Image from "next/image";
-import author from "../../public/author.jpg";
+import author from "../../public/images/author.jpg";
 import Link from "next/link";
 export default function Author() {
   return (

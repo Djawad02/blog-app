@@ -1,4 +1,4 @@
-import blogImage from "../../public/coffee.jpg";
+import blogImage from "../../public/images/blog.jpg";
 import Link from "next/link";
 import Image from "next/image";
 import Author from "./Author";
@@ -16,9 +16,9 @@ export function Post({ post }: PostProps) {
       <div className="images">
         <Link href={`/blogs/${post.id}`}>
           <Image
-            src={blogImage}
-            width={400}
-            height={350}
+            src={post.imagePath || blogImage}
+            width={300}
+            height={250}
             alt="blog image"
             className="rounded"
           />
