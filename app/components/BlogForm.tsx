@@ -1,19 +1,6 @@
 "use client";
 import React, { useState } from "react";
 
-interface BlogFormProps {
-  title: string;
-  onSubmit: (
-    name: string,
-    authorId: number,
-    createdAt: string,
-    updatedAt: string,
-    content: string,
-    image_path?: string
-  ) => void;
-  authorId: number;
-}
-
 const BlogForm = ({ title, onSubmit, authorId }: BlogFormProps) => {
   const [blogTitle, setBlogTitle] = useState("");
   const [content, setContent] = useState("");

@@ -6,41 +6,34 @@ import Image from "next/image";
 import Author from "./Author";
 import Pagination from "./Pagination";
 
-interface PostType {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-}
-
-interface PostProps {
-  post: PostType;
-}
-
 const BlogListing = () => {
-  const dummyPosts: PostType[] = new Array(20).fill(0).map((_, i) => ({
-    id: i,
-    title: `Blog Post ${i + 1}`,
-    description: "This is a random description for the blog.",
-    category: "Web, Design",
-    date: "September 30, 2024",
-  }));
-
-  const POSTS_PER_PAGE = 9;
-
+  const [posts, setPosts] = useState<PostType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const POSTS_PER_PAGE = 8;
 
   useEffect(() => {
-    setTotalPages(Math.ceil(dummyPosts.length / POSTS_PER_PAGE));
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("/api/blogs"); // Adjust the endpoint as necessary
+        const data = await response.json();
+        setPosts(data); // Assuming your API returns an array of blog posts
+
+        // Set total pages based on the fetched data
+        setTotalPages(Math.ceil(data.length / POSTS_PER_PAGE));
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
   }, []);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const currentPosts = dummyPosts.slice(
+  const currentPosts = posts.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE
   );
@@ -66,7 +59,7 @@ function Post({ post }: PostProps) {
   return (
     <div className="item">
       <div className="images">
-        <Link href={`/blogs/${post.id + 1}`}>
+        <Link href={`/blogs/${post.id}`}>
           <Image
             src={blogImage}
             width={400}
