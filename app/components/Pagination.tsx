@@ -1,11 +1,5 @@
 import React from "react";
 
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-
 const Pagination = ({
   currentPage,
   totalPages,
@@ -28,7 +22,7 @@ const Pagination = ({
       <button
         onClick={handlePrevClick}
         disabled={currentPage === 1}
-        className="px-4 py-2 mx-1 bg-gray-200 rounded hover:bg-gray-300"
+        className="px-4 py-2 mx-1 bg-gray-200 rounded hover:bg-red-200"
       >
         Previous
       </button>
@@ -40,7 +34,7 @@ const Pagination = ({
           className={`px-4 py-2 mx-1 rounded ${
             currentPage === i + 1
               ? "bg-red-300 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
+              : "bg-gray-200 hover:bg-red-200"
           }`}
         >
           {i + 1}
@@ -50,7 +44,7 @@ const Pagination = ({
       <button
         onClick={handleNextClick}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 mx-1 bg-gray-200 rounded hover:bg-gray-300"
+        className="px-4 py-2 mx-1 bg-gray-200 rounded hover:bg-red-200"
       >
         Next
       </button>

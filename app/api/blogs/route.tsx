@@ -3,8 +3,35 @@ import prisma from "@/prisma/client";
 import blogSchema from "./schema";
 
 export async function GET(request: NextRequest) {
-  const blogs = await prisma.blog.findMany();
-  return NextResponse.json(blogs, { status: 200 });
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "9", 10);
+  const skip = (page - 1) * limit;
+
+  try {
+    // Get total blog count
+    const totalBlogs = await prisma.blog.count();
+
+    // Fetch paginated blogs
+    const blogs = await prisma.blog.findMany({
+      skip: skip,
+      take: limit,
+      orderBy: {
+        createdAt: "desc", // Assuming you have a createdAt field
+      },
+    });
+
+    return NextResponse.json({
+      blogs,
+      totalPages: Math.ceil(totalBlogs / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch blogs" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {

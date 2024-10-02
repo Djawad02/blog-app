@@ -1,9 +1,11 @@
 interface PostType {
     id: number;
     title: string;
-    description: string; // Update this if you get a different field name from your API
-    category: string; // Update this if your API uses a different field name
-    date: string; // Update this if your API provides a different date format
+    content: string; 
+    authorId: number;
+    createdAt: string;
+    updatedAt: string;
+    image_path:string
 }
   
 interface PostProps {
