@@ -39,3 +39,4 @@ export const fetchBlogsWithLimit = async (page: number, limit: number) => {
     throw error; 
   }
 };
+

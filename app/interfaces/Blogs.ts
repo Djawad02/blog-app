@@ -1,3 +1,13 @@
+interface Category {
+    id: number; 
+    name: string;
+}
+
+interface Tag{
+    id: number; 
+    name: string;
+}
+
 interface PostType {
     id: number;
     title: string;
@@ -5,7 +15,9 @@ interface PostType {
     authorId: number;
     createdAt: string;
     updatedAt: string;
-    imagePath:string
+    imagePath:string,
+    categories: Category[];
+    tags: Tag[]
 }
   
 interface PostProps {

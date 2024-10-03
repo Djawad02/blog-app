@@ -53,7 +53,7 @@ export function Post({ post }: PostProps) {
       <div className="info flex justify-center flex-col">
         <div className="cat">
           <Link href="/" className="text-red-500 hover:text-red-800 text-sm">
-            {author ? author.name : "Unknown Author"}
+            {/* {author ? author.name : "Unknown Author"} */}4 min read
           </Link>
           <Link href="/" className="text-gray-500 hover:text-gray-800 text-sm">
             {" - "}
@@ -73,6 +73,38 @@ export function Post({ post }: PostProps) {
             ? `${post.content.slice(0, 100)}...`
             : post.content}
         </p>
+
+        {/* Render categories */}
+
+        {post.categories && post.categories.length > 0 && (
+          <div className="categories">
+            <strong>Categories: </strong>
+            {post.categories.map((category) => (
+              <span
+                key={category.id}
+                className="category-blog text-red-500 hover:text-red-800 text-sm"
+              >
+                {category.name}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Render tags */}
+
+        {post.tags && post.tags.length > 0 && (
+          <div className="tags">
+            <strong>Tags: </strong>
+            {post.tags.map((tag) => (
+              <span
+                key={tag.id}
+                className="tag-blog text-red-800 hover:text-red-500 text-sm"
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        )}
 
         <Author authorId={post.authorId} />
       </div>

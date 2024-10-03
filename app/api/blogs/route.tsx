@@ -2,35 +2,46 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import blogSchema from "./schema";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || "9", 10);
-  const skip = (page - 1) * limit;
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 10;
 
   try {
-    // Get total blog count
-    const totalBlogs = await prisma.blog.count();
-
-    // Fetch paginated blogs
     const blogs = await prisma.blog.findMany({
-      skip: skip,
+      skip: (page - 1) * limit,
       take: limit,
       orderBy: {
-        createdAt: "desc", // Assuming you have a createdAt field
+        createdAt: "desc",
+      },
+      include: {
+        categories: {
+          include: {
+            category: true, // Include related categories
+          },
+        },
+        tags: {
+          include: {
+            tag: true, // Include related tags
+          },
+        },
       },
     });
 
+    const totalBlogs = await prisma.blog.count();
+    const formattedBlogs = blogs.map((blog) => ({
+      ...blog,
+      categories: blog.categories.map((c) => c.category), // Flatten nested categories
+      tags: blog.tags.map((t) => t.tag),
+    }));
+
     return NextResponse.json({
-      blogs,
+      blogs: formattedBlogs,
       totalPages: Math.ceil(totalBlogs / limit),
-      currentPage: page,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch blogs" },
-      { status: 500 }
-    );
+    console.error("Error fetching blogs:", error);
+    return NextResponse.error(); // Return a 500 error response
   }
 }
 
