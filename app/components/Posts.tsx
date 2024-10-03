@@ -68,7 +68,7 @@ export function Post({ post }: PostProps) {
             {post.title}
           </Link>
         </div>
-        <p className="text-gray-500 py-3">
+        <p className="text-gray-500 py-3 text-sm">
           {post.content.length > 100
             ? `${post.content.slice(0, 100)}...`
             : post.content}
@@ -77,7 +77,7 @@ export function Post({ post }: PostProps) {
         {/* Render categories */}
 
         {post.categories && post.categories.length > 0 && (
-          <div className="categories">
+          <div className="categories text-sm">
             <strong>Categories: </strong>
             {post.categories.map((category) => (
               <span
@@ -94,7 +94,7 @@ export function Post({ post }: PostProps) {
         {/* Render tags */}
 
         {post.tags && post.tags.length > 0 && (
-          <div className="tags">
+          <div className="tags text-sm">
             <strong>Tags: </strong>
             {post.tags.map((tag) => (
               <span
