@@ -1,32 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import { DeleteTag, getTags } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const DeleteTagPage = () => {
   const [selectedTagId, setSelectedTagId] = useState<number | undefined>(
     undefined
   );
+  const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
 
-  const tags = [
-    { id: 1, name: "JavaScript" },
-    { id: 2, name: "React" },
-    { id: 3, name: "Node.js" },
-  ];
+  // Fetch categories from the database
+  const fetchTags = async () => {
+    try {
+      const data = await getTags();
+      setTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
 
   const handleDeleteTag = async (tagId: number) => {
-    // Perform deletion logic here
-    console.log(`Tag with ID ${tagId} deleted`);
-
-    // Example of a future API call:
-    // await fetch(`/api/tags/${tagId}`, {
-    //   method: "DELETE",
-    // });
+    try {
+      const deletedTag = await DeleteTag(tagId);
+      console.log(deletedTag);
+    } catch (error) {
+      console.error("Error adding tag:");
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedTagId !== undefined) {
       handleDeleteTag(selectedTagId);
-      setSelectedTagId(undefined); // Reset dropdown after deletion
+      setSelectedTagId(undefined);
     }
   };
 

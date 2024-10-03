@@ -1,40 +1,43 @@
 "use client";
-import React, { useState } from "react";
+import { getTags, UpdateTag } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const EditTagPage = () => {
   const [selectedTagId, setSelectedTagId] = useState<number | undefined>(
     undefined
   );
+  const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
   const [tagName, setTagName] = useState<string>("");
 
-  const tags = [
-    { id: 1, name: "JavaScript" },
-    { id: 2, name: "React" },
-    { id: 3, name: "Node.js" },
-  ];
-
-  const handleSelectTag = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const tagId = Number(e.target.value);
-    setSelectedTagId(tagId);
-
-    // Find the selected tag and populate the form
-    const tag = tags.find((tag) => tag.id === tagId);
-    if (tag) {
-      setTagName(tag.name);
+  // Fetch categories from the database
+  const fetchTags = async () => {
+    try {
+      const data = await getTags();
+      setTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
     }
   };
-
+  useEffect(() => {
+    fetchTags();
+  }, []);
+  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(e.target.value);
+    setSelectedTagId(id);
+    const selectedTag = tags.find((tag) => tag.id === id);
+    setTagName(selectedTag ? selectedTag.name : "");
+  };
   const handleEditTag = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedTagId) {
-      // Update logic here
-      console.log(`Updated tag: ${selectedTagId}, ${tagName}`);
-
-      // Example API call to update tag in the future
-      // await fetch(`/api/tags/${selectedTagId}`, {
-      //   method: "PUT",
-      //   body: JSON.stringify({ name: tagName }),
-      // });
+      try {
+        const updatedTag = await UpdateTag(selectedTagId, {
+          name: tagName,
+        });
+        console.log("Updated tag:", updatedTag);
+      } catch (error) {
+        console.error("Error updating tag:", error);
+      }
     }
   };
 
@@ -45,7 +48,7 @@ const EditTagPage = () => {
         <form onSubmit={handleEditTag}>
           <select
             value={selectedTagId}
-            onChange={handleSelectTag}
+            onChange={handleTagChange}
             className="w-full p-2 border border-gray-300 rounded-md"
             required
           >

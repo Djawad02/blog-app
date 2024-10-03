@@ -1,4 +1,5 @@
 import { CategoryData } from "../interfaces/Categorydata";
+import { TagData } from "../interfaces/TagData";
 
 export const fetcher = async (url: string, options: RequestInit = {}) => {
     try {
@@ -78,6 +79,31 @@ export const DeleteCategory = async (id:number) => {
 
 export const UpdateCategory = async (id: number, data: { name: string }) => {
   return await fetcher(`/api/categories/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+//For Tags
+export const getTags = async () => {
+  return await fetcher('/api/tags/');
+};
+
+export const AddNewTag = async (tagData:TagData) => {
+  return await fetcher('/api/tags', {
+    method: 'POST',
+    body: JSON.stringify(tagData),
+  });
+};
+
+export const DeleteTag = async (id:number) => {
+  return await fetcher(`/api/tags/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+export const UpdateTag = async (id: number, data: { name: string }) => {
+  return await fetcher(`/api/tags/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
