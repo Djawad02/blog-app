@@ -1,40 +1,48 @@
 "use client";
-import React, { useState } from "react";
+import { getCategories, UpdateCategory } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const EditCategoryPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<
     number | undefined
   >(undefined);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
   const [categoryName, setCategoryName] = useState<string>("");
 
-  const categories = [
-    { id: 1, name: "Technology" },
-    { id: 2, name: "Travel" },
-    { id: 3, name: "Health" },
-  ];
-
-  const handleSelectCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const categoryId = Number(e.target.value);
-    setSelectedCategoryId(categoryId);
-
-    // Find the selected category and populate the form
-    const category = categories.find((category) => category.id === categoryId);
-    if (category) {
-      setCategoryName(category.name);
+  // Fetch categories from the database
+  const fetchCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(e.target.value);
+    setSelectedCategoryId(id);
+    const selectedCategory = categories.find((category) => category.id === id);
+    setCategoryName(selectedCategory ? selectedCategory.name : "");
   };
 
   const handleEditCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategoryId) {
-      // Update logic here
-      console.log(`Updated category: ${selectedCategoryId}, ${categoryName}`);
-
-      // Example API call to update category in the future
-      // await fetch(`/api/categories/${selectedCategoryId}`, {
-      //   method: "PUT",
-      //   body: JSON.stringify({ name: categoryName }),
-      // });
+      try {
+        const updatedCategory = await UpdateCategory(selectedCategoryId, {
+          name: categoryName,
+        });
+        console.log("Updated category:", updatedCategory);
+      } catch (error) {
+        console.error("Error updating category:", error);
+      }
     }
   };
 
@@ -47,7 +55,7 @@ const EditCategoryPage = () => {
         <form onSubmit={handleEditCategory}>
           <select
             value={selectedCategoryId}
-            onChange={handleSelectCategory}
+            onChange={handleCategoryChange}
             className="w-full p-2 border border-gray-300 rounded-md"
             required
           >

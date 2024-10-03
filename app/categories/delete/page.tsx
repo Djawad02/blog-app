@@ -1,32 +1,43 @@
 "use client";
-import React, { useState } from "react";
+import { DeleteCategory, getCategories } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const DeleteCategoryPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<
     number | undefined
   >(undefined);
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>(
+    []
+  );
 
-  const categories = [
-    { id: 1, name: "Technology" },
-    { id: 2, name: "Travel" },
-    { id: 3, name: "Health" },
-  ];
+  // Fetch categories from the database
+  const fetchCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleDeleteCategory = async (categoryId: number) => {
-    // Perform deletion logic here
-    console.log(`Category with ID ${categoryId} deleted`);
-
-    // Example of a future API call:
-    // await fetch(`/api/categories/${categoryId}`, {
-    //   method: "DELETE",
-    // });
+    try {
+      const deletedCategory = await DeleteCategory(categoryId);
+      console.log(deletedCategory);
+    } catch (error) {
+      console.error("Error adding category:");
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategoryId !== undefined) {
       handleDeleteCategory(selectedCategoryId);
-      setSelectedCategoryId(undefined); // Reset dropdown after deletion
+      setSelectedCategoryId(undefined);
     }
   };
 

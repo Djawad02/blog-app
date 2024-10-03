@@ -1,3 +1,5 @@
+import { CategoryData } from "../interfaces/Categorydata";
+
 export const fetcher = async (url: string, options: RequestInit = {}) => {
     try {
       const res = await fetch(url, options);
@@ -54,3 +56,29 @@ export const getPostsByAuthorId = async (authorId: number) => {
   }
 }
 
+
+//For categories
+export const getCategories = async () => {
+  return await fetcher('/api/categories/');
+};
+
+
+export const AddNewCategory = async (categoryData:CategoryData) => {
+  return await fetcher('/api/categories', {
+    method: 'POST',
+    body: JSON.stringify(categoryData),
+  });
+};
+
+export const DeleteCategory = async (id:number) => {
+  return await fetcher(`/api/categories/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+export const UpdateCategory = async (id: number, data: { name: string }) => {
+  return await fetcher(`/api/categories/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
