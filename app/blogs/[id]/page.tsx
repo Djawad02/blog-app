@@ -10,7 +10,6 @@ import { getBlogById } from "@/app/middleware/apiMiddleware";
 const IndividualBlog = () => {
   const params = useParams();
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
-
   const [blogData, setBlogData] = useState<PostType | null>(null);
 
   useEffect(() => {
@@ -32,19 +31,33 @@ const IndividualBlog = () => {
     return <p>Loading...</p>;
   }
 
+  const formattedDate = blogData.createdAt
+    ? new Date(blogData.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "No date available"; // Fallback for missing date
+
   return (
     <main>
       <section className="container mx-auto md:px-2 py-16 w-1/2">
         <div className="flex justify-center">
           <Author authorId={blogData.authorId} />
         </div>
+        <div className="flex items-center justify-center">
+          <p className="text-gray-500 text-sm flex items-center">
+            <span className="text-red-500 hover:text-red-800 mr-2">
+              4 min read
+            </span>
+            <span>- {formattedDate}</span>
+          </p>
+        </div>
+
         <div className="blog py-10">
           <h1 className="font-bold text-2xl text-center pb-5">
             {blogData.title}
           </h1>
-          <p className="text-gray-500 text-md text-center">
-            {blogData.content.slice(0, 100)}...
-          </p>
           <div className="py-10">
             <Image
               src={blogData.imagePath || blogImagePlaceholder}
