@@ -85,6 +85,7 @@ export function Post({ post }: PostProps) {
                 className="category-blog text-red-500 hover:text-red-800 text-sm"
               >
                 {category.name}
+                {", "}
               </span>
             ))}
           </div>
@@ -101,6 +102,7 @@ export function Post({ post }: PostProps) {
                 className="tag-blog text-red-800 hover:text-red-500 text-sm"
               >
                 {tag.name}
+                {", "}
               </span>
             ))}
           </div>
