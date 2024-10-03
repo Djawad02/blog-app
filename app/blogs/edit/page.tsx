@@ -24,7 +24,7 @@ const EditBlogPage = () => {
     try {
       const data = await getBlogs();
       if (data && Array.isArray(data.blogs)) {
-        setBlogs(data.blogs); // Access the 'blogs' array from the response
+        setBlogs(data.blogs);
       } else {
         console.error("Error: Expected an array of blogs but received", data);
       }
@@ -63,6 +63,18 @@ const EditBlogPage = () => {
       } catch (error) {
         console.error("Error updating blog:", error);
       }
+    }
+  };
+
+  const openManageCategories = () => {
+    if (selectedBlogId) {
+      window.open(`/categories/manage?id=${selectedBlogId}`, "_blank");
+    }
+  };
+
+  const openManageTags = () => {
+    if (selectedBlogId) {
+      window.open(`/manage-tags?id=${selectedBlogId}`, "_blank");
     }
   };
 
@@ -117,6 +129,20 @@ const EditBlogPage = () => {
             className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
           >
             Update Blog
+          </button>
+          <button
+            type="button"
+            onClick={openManageCategories}
+            className="mt-4 w-full bg-blue-400 text-white py-2 rounded-md hover:bg-blue-300 transition duration-200"
+          >
+            Manage Categories
+          </button>
+          <button
+            type="button"
+            onClick={openManageTags}
+            className="mt-4 w-full bg-green-400 text-white py-2 rounded-md hover:bg-green-300 transition duration-200"
+          >
+            Manage Tags
           </button>
         </form>
       </div>

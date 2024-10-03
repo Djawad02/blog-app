@@ -98,7 +98,9 @@ export const AddNewBlog = async (blogData:BlogData) => {
 };
 
 
-
+export const fetchCategoriesForBlog = async(blogid:string)=>{
+  return await fetcher(`/api/blogs_categories/${blogid}`);
+}
 //For categories
 export const getCategories = async () => {
   return await fetcher('/api/categories/');
@@ -147,5 +149,41 @@ export const UpdateTag = async (id: number, data: { name: string }) => {
   return await fetcher(`/api/tags/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
+  });
+};
+
+
+//managing many to many of blogs_categories
+export const removeCategoryFromBlog = async (id: number, data: { categoryId: number }) => {
+  return await fetch(`/api/blogs_categories/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json', 
+    },
+    body: JSON.stringify(data), 
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to remove category');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error removing category:', error);
+      throw error;
+    });
+};
+
+
+export const addCategoryToBlog = async (blogId: number, categoryId: number) => {
+  return await fetcher("/api/blogs_categories", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      blogId,
+      categoryId,
+    }),
   });
 };
