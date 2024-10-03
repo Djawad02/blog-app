@@ -57,7 +57,10 @@ const IndividualBlog = () => {
             <p>{blogData.content}</p>
           </div>
         </div>
-        <RelatedSection />
+        <RelatedSection
+          authorId={blogData.authorId}
+          currentPostId={blogData.id}
+        />
       </section>
     </main>
   );

@@ -24,7 +24,6 @@ export const getBlogById = async (id: string) => {
     return await fetcher(`/api/blogs/${id}`);
 };
 
-// utils/apiMiddleware.ts
 
 export const fetchBlogsWithLimit = async (page: number, limit: number) => {
   try {
@@ -39,4 +38,19 @@ export const fetchBlogsWithLimit = async (page: number, limit: number) => {
     throw error; 
   }
 };
+
+export const getPostsByAuthorId = async (authorId: number) => {
+  try {
+    const response = await fetch(`/api/blogs?authorId=${authorId}`);
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const posts = await response.json();
+    return posts;
+  } catch (error) {
+    console.error("Error fetching posts by author ID:", error);
+    throw error; 
+  }
+}
 

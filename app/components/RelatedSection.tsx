@@ -1,18 +1,51 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Author from "./Author";
 import blogImage from "../../public/images/blog.jpg";
+import { getPostsByAuthorId } from "../middleware/apiMiddleware";
 
-const RelatedSection = () => {
+interface RelatedSectionProps {
+  authorId: number;
+  currentPostId: number;
+}
+
+const RelatedSection = ({ authorId, currentPostId }: RelatedSectionProps) => {
+  const [relatedPosts, setRelatedPosts] = useState<PostType[]>([]);
+
+  useEffect(() => {
+    const fetchRelatedPosts = async () => {
+      try {
+        const response = await getPostsByAuthorId(authorId);
+
+        const posts = response.blogs;
+        if (Array.isArray(posts)) {
+          const filteredPosts = posts.filter(
+            (post: PostType) =>
+              post.id !== currentPostId && post.authorId === authorId
+          );
+          // Slice the filtered posts to a maximum of 3
+          const limitedPosts = filteredPosts.slice(0, 3);
+          setRelatedPosts(limitedPosts);
+        } else {
+          console.error("Fetched posts is not an array:", posts);
+        }
+      } catch (error) {
+        console.error("Error fetching related posts:", error);
+      }
+    };
+
+    fetchRelatedPosts();
+  }, [authorId, currentPostId]);
+
   return (
     <section className="pt-20">
       <h1 className="font-bold text-xl py-10">More From Author...</h1>
       <div className="flex flex-col gap-10">
-        {Post()}
-        {Post()}
-        {Post()}
-        {Post()}
+        {relatedPosts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
       </div>
     </section>
   );
@@ -20,42 +53,40 @@ const RelatedSection = () => {
 
 export default RelatedSection;
 
-function Post() {
+const Post = ({ post }: { post: PostType }) => {
   return (
     <div className="flex gap-5">
       <div className="image flex flex-col justify-start">
-        <Link href={"/"}>
+        <Link href={`/blogs/${post.id}`}>
           <Image
-            src={blogImage}
+            src={post.imagePath || blogImage}
             alt="Image"
             className="rounded"
-            width={300}
-            height={200}
+            width={400}
+            height={250}
           />
         </Link>
       </div>
       <div className="info flex justify-center flex-col">
         <div className="cat">
-          <Link href="/" className="text-red-500 hover:text-red-800 text-sm">
-            Web, Design
-          </Link>
+          {/* You can add category links here if needed */}
           <Link href="/" className="text-gray-500 hover:text-gray-800 text-sm">
-            - September 30,2024
+            - {new Date(post.createdAt).toLocaleDateString()}
           </Link>
         </div>
         <div className="title">
           <Link
-            href="/"
-            className="text-xl font-bold text-gray-800 hover:text-gray-500"
+            href={`/blogs/${post.id}`}
+            className="text-lg font-bold text-gray-800 hover:text-gray-500"
           >
-            Blog Title
+            {post.title}
           </Link>
         </div>
-        <p className="text-gray-500 py3">
-          This is a random description for the blog. Just a random piece of text
+        <p className="text-gray-500 py-3 text-sm">
+          {post.content.slice(0, 100)}...
         </p>
-        <Author />
+        <Author authorId={post.authorId} />
       </div>
     </div>
   );
-}
+};
