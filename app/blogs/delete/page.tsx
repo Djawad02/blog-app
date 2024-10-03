@@ -1,25 +1,38 @@
 "use client";
-import React, { useState } from "react";
+import { DeleteBlog, getBlogs } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const DeleteBlogPage = () => {
   const [selectedBlogId, setSelectedBlogId] = useState<number | undefined>(
     undefined
   );
+  const [blogs, setBlogs] = useState<{ id: number; title: string }[]>([]);
 
-  const blogs = [
-    { id: 1, title: "My First Blog Post" },
-    { id: 2, title: "A Day in the Life" },
-    { id: 3, title: "Travel Adventures" },
-  ];
+  // Fetch blogs from the database
+  const fetchBlogs = async () => {
+    try {
+      const data = await getBlogs();
+      if (data && Array.isArray(data.blogs)) {
+        setBlogs(data.blogs); // Access the 'blogs' array from the response
+      } else {
+        console.error("Error: Expected an array of blogs but received", data);
+      }
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
   const handleDeleteBlog = async (blogId: number) => {
-    // Perform deletion logic here
-    console.log(`Blog with ID ${blogId} deleted`);
-
-    // Example of a future API call:
-    // await fetch(`/api/blogs/${blogId}`, {
-    //   method: "DELETE",
-    // });
+    try {
+      const deletedBlog = await DeleteBlog(blogId);
+      console.log(deletedBlog);
+    } catch (error) {
+      console.error("Error adding category:");
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {

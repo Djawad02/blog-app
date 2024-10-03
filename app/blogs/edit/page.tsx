@@ -1,61 +1,68 @@
 "use client";
-import React, { useState } from "react";
+import { getBlogs, UpdateBlog } from "@/app/middleware/apiMiddleware";
+import React, { useEffect, useState } from "react";
 
 const EditBlogPage = () => {
   const [selectedBlogId, setSelectedBlogId] = useState<number | undefined>(
     undefined
   );
+  const [blogs, setBlogs] = useState<
+    {
+      id: number;
+      authorId: number;
+      title: string;
+      content?: string;
+      imagePath?: string;
+    }[]
+  >([]);
   const [blogTitle, setBlogTitle] = useState<string>("");
   const [blogContent, setBlogContent] = useState<string>("");
   const [blogImagePath, setBlogImagePath] = useState<string>("");
 
-  const blogs = [
-    {
-      id: 1,
-      title: "My First Blog Post",
-      content: "Content 1",
-      image_path: "path1.jpg",
-    },
-    {
-      id: 2,
-      title: "A Day in the Life",
-      content: "Content 2",
-      image_path: "path2.jpg",
-    },
-    {
-      id: 3,
-      title: "Travel Adventures",
-      content: "Content 3",
-      image_path: "path3.jpg",
-    },
-  ];
+  // Fetch blogs from the database
+  const fetchBlogs = async () => {
+    try {
+      const data = await getBlogs();
+      if (data && Array.isArray(data.blogs)) {
+        setBlogs(data.blogs); // Access the 'blogs' array from the response
+      } else {
+        console.error("Error: Expected an array of blogs but received", data);
+      }
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
 
-  const handleSelectBlog = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const blogId = Number(e.target.value);
-    setSelectedBlogId(blogId);
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
-    // Find the selected blog and populate the form
-    const blog = blogs.find((blog) => blog.id === blogId);
-    if (blog) {
-      setBlogTitle(blog.title);
-      setBlogContent(blog.content);
-      setBlogImagePath(blog.image_path);
+  const handleBlogChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(e.target.value);
+    setSelectedBlogId(id);
+
+    const selectedBlog = blogs.find((blog) => blog.id === id);
+    if (selectedBlog) {
+      setBlogTitle(selectedBlog.title || "");
+      setBlogContent(selectedBlog.content || "");
+      setBlogImagePath(selectedBlog.imagePath || "");
     }
   };
 
   const handleEditBlog = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedBlogId) {
-      // Update logic here
-      console.log(
-        `Updated blog: ${selectedBlogId}, ${blogTitle}, ${blogContent}, ${blogImagePath}`
-      );
-
-      // Example API call to update blog in the future
-      // await fetch(`/api/blogs/${selectedBlogId}`, {
-      //   method: "PUT",
-      //   body: JSON.stringify({ title: blogTitle, content: blogContent, image_path: blogImagePath }),
-      // });
+      try {
+        const updatedBlog = await UpdateBlog(selectedBlogId, {
+          authorId: 2,
+          title: blogTitle,
+          content: blogContent,
+          imagePath: blogImagePath,
+        });
+        console.log("Updated blog:", updatedBlog);
+      } catch (error) {
+        console.error("Error updating blog:", error);
+      }
     }
   };
 
@@ -65,8 +72,8 @@ const EditBlogPage = () => {
         <h1 className="text-xl font-semibold text-center mb-4">Edit Blog</h1>
         <form onSubmit={handleEditBlog}>
           <select
-            value={selectedBlogId}
-            onChange={handleSelectBlog}
+            value={selectedBlogId || ""}
+            onChange={handleBlogChange}
             className="w-full p-2 border border-gray-300 rounded-md"
             required
           >

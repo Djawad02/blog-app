@@ -23,10 +23,26 @@ return await fetcher(`/api/users/${authorId}`);
 
 
 //For blogs
+export const getBlogs = async() =>{
+  return await fetcher('/api/blogs/');
+}
+
 export const getBlogById = async (id: string) => {
     return await fetcher(`/api/blogs/${id}`);
 };
 
+export const UpdateBlog = async (id: number, data: {authorId: number, title: string, content: string, imagePath: string }) => {
+  return await fetcher(`/api/blogs/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const DeleteBlog = async (id:number) => {
+  return await fetcher(`/api/blogs/${id}`, {
+    method: 'DELETE',
+  });
+};
 
 export const fetchBlogsWithLimit = async (page: number, limit: number) => {
   try {
@@ -56,6 +72,14 @@ export const getPostsByAuthorId = async (authorId: number) => {
     throw error; 
   }
 }
+
+export const AddNewBlog = async (blogData:BlogData) => {
+  return await fetcher('/api/blogs', {
+    method: 'POST',
+    body: JSON.stringify(blogData),
+  });
+};
+
 
 
 //For categories
