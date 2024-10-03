@@ -74,7 +74,7 @@ const EditBlogPage = () => {
 
   const openManageTags = () => {
     if (selectedBlogId) {
-      window.open(`/manage-tags?id=${selectedBlogId}`, "_blank");
+      window.open(`/tags/manage?id=${selectedBlogId}`, "_blank");
     }
   };
 

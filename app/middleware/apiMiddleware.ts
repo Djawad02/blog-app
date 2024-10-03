@@ -132,6 +132,10 @@ export const getTags = async () => {
   return await fetcher('/api/tags/');
 };
 
+export const fetchTagsForBlog = async(blogid:string)=>{
+  return await fetcher(`/api/blogs_tags/${blogid}`);
+}
+
 export const AddNewTag = async (tagData:TagData) => {
   return await fetcher('/api/tags', {
     method: 'POST',
@@ -184,6 +188,41 @@ export const addCategoryToBlog = async (blogId: number, categoryId: number) => {
     body: JSON.stringify({
       blogId,
       categoryId,
+    }),
+  });
+};
+
+//managing many to many of blogs_tags
+export const removeTagFromBlog = async (id: number, data: { tagId: number }) => {
+  return await fetch(`/api/blogs_tags/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json', 
+    },
+    body: JSON.stringify(data), 
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to remove tag');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error removing tag:', error);
+      throw error;
+    });
+};
+
+
+export const addtagToBlog = async (blogId: number, tagId: number) => {
+  return await fetcher("/api/blogs_tags", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      blogId,
+      tagId,
     }),
   });
 };
