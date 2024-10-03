@@ -6,11 +6,38 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
+  const category = searchParams.get("category"); // Get category from query params
+  const tag = searchParams.get("tag"); // Get tag from query params
 
   try {
+    const whereClause: any = {};
+
+    // Add category filter if a category is selected
+    if (category) {
+      whereClause.categories = {
+        some: {
+          category: {
+            name: category, // Match category by name
+          },
+        },
+      };
+    }
+
+    // Add tag filter if a tag is selected
+    if (tag) {
+      whereClause.tags = {
+        some: {
+          tag: {
+            name: tag, // Match tag by name
+          },
+        },
+      };
+    }
+
     const blogs = await prisma.blog.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      where: whereClause, // Apply filters
       orderBy: {
         createdAt: "desc",
       },
@@ -28,7 +55,10 @@ export async function GET(request: Request) {
       },
     });
 
-    const totalBlogs = await prisma.blog.count();
+    const totalBlogs = await prisma.blog.count({
+      where: whereClause, // Count filtered blogs
+    });
+
     const formattedBlogs = blogs.map((blog) => ({
       ...blog,
       categories: blog.categories.map((c) => c.category), // Flatten nested categories

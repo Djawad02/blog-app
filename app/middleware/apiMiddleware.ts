@@ -44,19 +44,31 @@ export const DeleteBlog = async (id:number) => {
   });
 };
 
-export const fetchBlogsWithLimit = async (page: number, limit: number) => {
+export const fetchBlogsWithLimit = async (
+  page: number,
+  limit: number,
+  category?: string,
+  tag?: string
+) => {
   try {
-    const response = await fetch(`/api/blogs?page=${page}&limit=${limit}`);
+    let query = `/api/blogs?page=${page}&limit=${limit}`;
+    if (category) query += `&category=${category}`;
+    if (tag) query += `&tag=${tag}`;
+
+    const response = await fetch(query);
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
+
     const data = await response.json();
-    return data; 
+    return data; // Returns blogs and totalPages
   } catch (error) {
     console.error("Error fetching blogs:", error);
     throw error; 
   }
 };
+
+
 
 export const getPostsByAuthorId = async (authorId: number) => {
   try {
