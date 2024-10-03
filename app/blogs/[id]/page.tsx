@@ -5,9 +5,11 @@ import React, { useState, useEffect } from "react";
 import blogImagePlaceholder from "../../../public/images/nextJs.png";
 import RelatedSection from "@/app/components/RelatedSection";
 import { useParams } from "next/navigation";
+import { getBlogById } from "@/app/middleware/apiMiddleware";
 
 const IndividualBlog = () => {
-  const { id } = useParams(); // Extract the blog ID from the URL
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
 
   const [blogData, setBlogData] = useState<PostType | null>(null);
 
@@ -15,13 +17,8 @@ const IndividualBlog = () => {
     if (id) {
       const fetchBlog = async () => {
         try {
-          const response = await fetch(`/api/blogs/${id}`);
-          if (response.ok) {
-            const data = await response.json();
-            setBlogData(data);
-          } else {
-            console.error("Error fetching blog:", response.statusText);
-          }
+          const data = await getBlogById(id);
+          setBlogData(data);
         } catch (error) {
           console.error("Error fetching blog:", error);
         }
@@ -32,14 +29,14 @@ const IndividualBlog = () => {
   }, [id]);
 
   if (!blogData) {
-    return <p>Loading...</p>; // Show loading while the data is being fetched
+    return <p>Loading...</p>;
   }
 
   return (
     <main>
       <section className="container mx-auto md:px-2 py-16 w-1/2">
         <div className="flex justify-center">
-          <Author />
+          <Author authorId={blogData.authorId} />
         </div>
         <div className="blog py-10">
           <h1 className="font-bold text-2xl text-center pb-5">

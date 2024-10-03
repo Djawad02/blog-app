@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 
 import Pagination from "./Pagination";
 import { Post } from "./Posts";
+import { fetchBlogsWithLimit } from "../middleware/apiMiddleware";
 
 const BlogListing = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -16,23 +17,20 @@ const BlogListing = () => {
     </div>
   );
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `/api/blogs?page=${currentPage}&limit=${POSTS_PER_PAGE}`
-        );
-        const data = await response.json();
+        const data = await fetchBlogsWithLimit(currentPage, POSTS_PER_PAGE);
         setPosts(data.blogs);
         setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
-    fetchBlogs();
+    fetchData();
   }, [currentPage]);
 
   const handlePageChange = (page: number) => {
