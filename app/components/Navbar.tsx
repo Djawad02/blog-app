@@ -1,7 +1,21 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Use router to redirect on search
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState(""); // State to hold search input
+  const router = useRouter(); // Router for navigation
+
+  // Function to handle search
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Redirect to the search results page
+      router.push(`/blogs/search?title=${searchQuery}`);
+    }
+  };
+
   return (
     <div className="bg-red-300">
       <div className="xl:container xl:mx-auto flex flex-col items-center sm:flex-row sm:justify-between text-center py-3">
@@ -17,11 +31,21 @@ const Navbar = () => {
 
         {/* Center: Search bar */}
         <div className="flex md:flex-none w-full sm:w-auto justify-center order-2 py-4 sm:py-0">
-          <input
-            type="text"
-            placeholder="Search blogs..."
-            className="input-text placeholder:text-gray-600"
-          />
+          <form onSubmit={handleSearch} className="flex">
+            <input
+              type="text"
+              placeholder="Search blogs..."
+              className="input-text placeholder:text-gray-600"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
+            />
+            <button
+              type="submit"
+              className="ml-2 p-2 text-white rounded-xl  bg-red-400 hover:bg-red-700"
+            >
+              Search
+            </button>
+          </form>
         </div>
 
         {/* Right Side: Navigation links */}

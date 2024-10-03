@@ -28,7 +28,12 @@ export const getBlogs = async() =>{
 }
 
 export const getBlogById = async (id: string) => {
-    return await fetcher(`/api/blogs/${id}`);
+  return await fetcher(`/api/blogs/${id}`);
+};
+
+export const searchBlogsByTitle = async (title: string) => {
+  const encodedTitle = encodeURIComponent(title);
+  return await fetcher(`/api/blogs/search?title=${encodedTitle}`);
 };
 
 export const UpdateBlog = async (id: number, data: {authorId: number, title: string, content: string, imagePath: string }) => {
@@ -61,7 +66,7 @@ export const fetchBlogsWithLimit = async (
     }
 
     const data = await response.json();
-    return data; // Returns blogs and totalPages
+    return data; 
   } catch (error) {
     console.error("Error fetching blogs:", error);
     throw error; 
