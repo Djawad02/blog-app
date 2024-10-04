@@ -1,5 +1,6 @@
 import { CategoryData } from "../interfaces/Categorydata";
 import { TagData } from "../interfaces/TagData";
+import { UserData } from "../interfaces/UserData";
 
 export const fetcher = async (url: string, options: RequestInit = {}) => {
     try {
@@ -21,6 +22,14 @@ export const getAuthorById = async (authorId: number) => {
 return await fetcher(`/api/users/${authorId}`);
 };
 
+//for registering new authors/users
+export const AddUser = async (userData:UserData) => {
+ return  await fetcher('/api/users', {
+    method: 'POST',
+    body: JSON.stringify(userData),
+  });
+
+};
 
 //For blogs
 export const getBlogs = async() =>{
