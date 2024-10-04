@@ -2,9 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+```bash
 git clone https://gitlab.com/co-ios/co-mean/initialrepo.git
-cd initialrepo  
 
+cd initialrepo  
+```
 
 First, run the development server:
 
@@ -37,9 +39,9 @@ Make sure to set up your database by creating a MySQL database and running the n
 ## Environment Variables
 You may need to create a .env file in the root of your project with the following variables:
 
-- DATABASE_URL=mysql://<user>:<password>@<host>:<port>/<database>
+- DATABASE_URL=mysql:// (user):(password)@(host>=):3306/(database_name)
 - NEXTAUTH_URL=http://localhost:3000
-- NEXTAUTH_SECRET=<any random key value>
+- NEXTAUTH_SECRET=(any random key value)
 
 Make sure your database is up and running before starting the application.
 
