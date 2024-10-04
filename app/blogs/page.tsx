@@ -1,11 +1,12 @@
 import React from "react";
 import Home from "../page";
+import CrudForm from "../components/CrudForm";
 
 const BlogPage = () => {
   return (
-    <main>
-      <Home />
-    </main>
+    <div>
+      <CrudForm heading="Manage Blogs" />
+    </div>
   );
 };
 

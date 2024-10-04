@@ -34,7 +34,7 @@ const Navbar = () => {
           <form onSubmit={handleSearch} className="flex">
             <input
               type="text"
-              placeholder="Search blogs..."
+              placeholder="Search blogs by title..."
               className="input-text placeholder:text-gray-600"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
@@ -53,14 +53,14 @@ const Navbar = () => {
           <Link href="/" className="hover:text-gray-600">
             Home
           </Link>
-          <Link href="/blogs/add" className="hover:text-gray-600">
-            New Blog
+          <Link href="/blogs" className="hover:text-gray-600">
+            Blogs
           </Link>
-          <Link href="/categories/add" className="hover:text-gray-600">
-            New Category
+          <Link href="/categories" className="hover:text-gray-600">
+            Categories
           </Link>
-          <Link href="/tags/add" className="hover:text-gray-600">
-            New Tag
+          <Link href="/tags" className="hover:text-gray-600">
+            Tags
           </Link>
           <Link href="/" className="font-bold hover:text-gray-600">
             Login{" "}
