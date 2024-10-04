@@ -2,11 +2,12 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Use router to redirect on search
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State to hold search input
   const router = useRouter(); // Router for navigation
-
+  const { status, data: session } = useSession();
   // Function to handle search
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,6 +17,7 @@ const Navbar = () => {
     }
   };
 
+  if (status === "loading") return null;
   return (
     <div className="bg-red-300">
       <div className="xl:container xl:mx-auto flex flex-col items-center sm:flex-row sm:justify-between text-center py-3">
@@ -62,9 +64,25 @@ const Navbar = () => {
           <Link href="/tags" className="hover:text-gray-600">
             Tags
           </Link>
-          <Link href="/" className="font-bold hover:text-gray-600">
-            Login{" "}
-          </Link>
+          {/* {status === "loading" && <div>Loading...</div>} */}
+          {status === "authenticated" && (
+            <div>
+              <Link
+                href="/api/auth/signout"
+                className="font-bold hover:text-gray-600"
+              >
+                Sign out
+              </Link>
+            </div>
+          )}
+          {status === "unauthenticated" && (
+            <Link
+              href="/api/auth/signin"
+              className="font-bold hover:text-gray-600"
+            >
+              Login{" "}
+            </Link>
+          )}
         </div>
       </div>
     </div>
