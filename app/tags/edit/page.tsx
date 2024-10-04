@@ -9,7 +9,7 @@ const EditTagPage = () => {
   const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
   const [tagName, setTagName] = useState<string>("");
 
-  // Fetch categories from the database
+  // Fetch tags from the database
   const fetchTags = async () => {
     try {
       const data = await getTags();
@@ -21,6 +21,7 @@ const EditTagPage = () => {
   useEffect(() => {
     fetchTags();
   }, []);
+
   const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = Number(e.target.value);
     setSelectedTagId(id);
