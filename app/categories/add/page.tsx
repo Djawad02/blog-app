@@ -34,7 +34,6 @@ const AddCategoryPage = () => {
   if (authorId === null) {
     return <div>Loading...</div>;
   }
-  console.log(authorId);
 
   const handleAddCategory = async (
     name: string,

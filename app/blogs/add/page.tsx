@@ -37,7 +37,6 @@ const AddBlogPage = () => {
   if (authorId === null) {
     return <div>Loading...</div>;
   }
-  console.log(authorId);
 
   const handleAddBlog = async (
     title: string,

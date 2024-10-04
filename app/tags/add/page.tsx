@@ -35,7 +35,6 @@ const AddTagPage = () => {
   if (authorId === null) {
     return <div>Loading...</div>;
   }
-  console.log(authorId);
   const handleAddTag = async (
     name: string,
     authorId: number,

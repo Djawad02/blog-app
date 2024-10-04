@@ -81,7 +81,6 @@ const EditBlogPage = () => {
   if (authorId === null) {
     return <div>Loading...</div>;
   }
-  console.log(authorId);
 
   const handleEditBlog = async (e: React.FormEvent) => {
     e.preventDefault();
