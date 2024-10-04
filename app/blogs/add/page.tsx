@@ -1,9 +1,40 @@
 "use client";
 import BlogForm from "@/app/components/BlogForm";
-import { AddNewBlog } from "@/app/middleware/apiMiddleware";
-import React from "react";
+import {
+  AddNewBlog,
+  fetchUserIdByUsername,
+} from "@/app/middleware/apiMiddleware";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 
 const AddBlogPage = () => {
+  const { data: session } = useSession();
+  const [authorId, setAuthorId] = useState<number | null>(null);
+
+  const authorUsername = session?.user!.email;
+
+  // Fetch the user ID once the username is available
+  useEffect(() => {
+    const getUserId = async () => {
+      if (authorUsername) {
+        const id = await fetchUserIdByUsername(authorUsername);
+        setAuthorId(id);
+      }
+    };
+    getUserId();
+  }, [authorUsername]);
+
+  // Check if the user is authenticated
+  if (!session) {
+    return <div>Please wait. Loading...</div>;
+  }
+
+  // Check if authorId is set before rendering the form
+  if (authorId === null) {
+    return <div>Loading...</div>;
+  }
+  console.log(authorId);
+
   const handleAddBlog = async (
     title: string,
     authorId: number,
@@ -30,8 +61,6 @@ const AddBlogPage = () => {
       console.error("Error adding Blog:");
     }
   };
-
-  const authorId = 2; // Replace with actual logged-in user ID from auth state
 
   return (
     <>

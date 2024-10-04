@@ -1,5 +1,10 @@
 "use client";
-import { getBlogs, UpdateBlog } from "@/app/middleware/apiMiddleware";
+import {
+  fetchUserIdByUsername,
+  getBlogs,
+  UpdateBlog,
+} from "@/app/middleware/apiMiddleware";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 const EditBlogPage = () => {
@@ -18,7 +23,9 @@ const EditBlogPage = () => {
   const [blogTitle, setBlogTitle] = useState<string>("");
   const [blogContent, setBlogContent] = useState<string>("");
   const [blogImagePath, setBlogImagePath] = useState<string>("");
-
+  const { data: session } = useSession();
+  const authorUsername = session?.user!.email;
+  const [authorId, setAuthorId] = useState<number | null>(null);
   // Fetch blogs from the database
   const fetchBlogs = async () => {
     try {
@@ -36,7 +43,20 @@ const EditBlogPage = () => {
   useEffect(() => {
     fetchBlogs();
   }, []);
+  useEffect(() => {
+    const fetchAuthorId = async () => {
+      if (authorUsername) {
+        const id = await fetchUserIdByUsername(authorUsername);
+        if (id !== null) {
+          setAuthorId(id);
+        } else {
+          console.error("Author ID not found for username:", authorUsername);
+        }
+      }
+    };
 
+    fetchAuthorId();
+  }, [authorUsername]);
   const handleBlogChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = Number(e.target.value);
     setSelectedBlogId(id);
@@ -48,13 +68,22 @@ const EditBlogPage = () => {
       setBlogImagePath(selectedBlog.imagePath || "");
     }
   };
+  if (!session) {
+    return <div>Please wait. Loading...</div>;
+  }
+
+  // Check if authorId is set before rendering the form
+  if (authorId === null) {
+    return <div>Loading...</div>;
+  }
+  console.log(authorId);
 
   const handleEditBlog = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedBlogId) {
       try {
         const updatedBlog = await UpdateBlog(selectedBlogId, {
-          authorId: 2,
+          authorId: authorId,
           title: blogTitle,
           content: blogContent,
           imagePath: blogImagePath,

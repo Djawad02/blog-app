@@ -22,6 +22,28 @@ export const getAuthorById = async (authorId: number) => {
 return await fetcher(`/api/users/${authorId}`);
 };
 
+export async function fetchUserIdByUsername(username: string): Promise<number | null> {
+  try {
+    const response = await fetch("/api/users/name", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user ID");
+    }
+
+    const data = await response.json();
+    return data.id ?? null;
+  } catch (error) {
+    console.error("Error fetching user ID:", error);
+    return null;
+  }
+}
+
 //for registering new authors/users
 export const AddUser = async (userData:UserData) => {
  return  await fetcher('/api/users', {
