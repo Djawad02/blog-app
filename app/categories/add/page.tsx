@@ -6,11 +6,12 @@ import {
   fetchUserIdByUsername,
 } from "@/app/middleware/apiMiddleware";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const AddCategoryPage = () => {
   const { data: session } = useSession();
   const [authorId, setAuthorId] = useState<number | null>(null);
-
+  const router = useRouter();
   const authorUsername = session?.user!.email;
 
   // Fetch the user ID once the username is available
@@ -51,6 +52,9 @@ const AddCategoryPage = () => {
     try {
       const newCategory = await AddNewCategory(tagData);
       console.log("New Category Added:", newCategory);
+      setTimeout(() => {
+        router.push("/categories");
+      }, 2000);
     } catch (error) {
       console.error("Error adding category:");
     }

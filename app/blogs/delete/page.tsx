@@ -1,5 +1,6 @@
 "use client";
 import { DeleteBlog, getBlogs } from "@/app/middleware/apiMiddleware";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const DeleteBlogPage = () => {
@@ -7,7 +8,7 @@ const DeleteBlogPage = () => {
     undefined
   );
   const [blogs, setBlogs] = useState<{ id: number; title: string }[]>([]);
-
+  const router = useRouter();
   // Fetch blogs from the database
   const fetchBlogs = async () => {
     try {
@@ -30,8 +31,11 @@ const DeleteBlogPage = () => {
     try {
       const deletedBlog = await DeleteBlog(blogId);
       console.log(deletedBlog);
+      setTimeout(() => {
+        router.push("/blogs");
+      }, 2000);
     } catch (error) {
-      console.error("Error adding category:");
+      console.error("Error adding Blog:");
     }
   };
 

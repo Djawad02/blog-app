@@ -1,5 +1,6 @@
 "use client";
 import { getTags, UpdateTag } from "@/app/middleware/apiMiddleware";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const EditTagPage = () => {
@@ -8,7 +9,7 @@ const EditTagPage = () => {
   );
   const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
   const [tagName, setTagName] = useState<string>("");
-
+  const router = useRouter();
   // Fetch tags from the database
   const fetchTags = async () => {
     try {
@@ -36,6 +37,9 @@ const EditTagPage = () => {
           name: tagName,
         });
         console.log("Updated tag:", updatedTag);
+        setTimeout(() => {
+          router.push("/tags");
+        }, 2000);
       } catch (error) {
         console.error("Error updating tag:", error);
       }

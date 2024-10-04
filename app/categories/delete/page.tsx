@@ -1,5 +1,6 @@
 "use client";
 import { DeleteCategory, getCategories } from "@/app/middleware/apiMiddleware";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const DeleteCategoryPage = () => {
@@ -9,7 +10,7 @@ const DeleteCategoryPage = () => {
   const [categories, setCategories] = useState<{ id: number; name: string }[]>(
     []
   );
-
+  const router = useRouter();
   // Fetch categories from the database
   const fetchCategories = async () => {
     try {
@@ -28,6 +29,9 @@ const DeleteCategoryPage = () => {
     try {
       const deletedCategory = await DeleteCategory(categoryId);
       console.log(deletedCategory);
+      setTimeout(() => {
+        router.push("/categories");
+      }, 2000);
     } catch (error) {
       console.error("Error adding category:");
     }

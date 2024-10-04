@@ -5,13 +5,14 @@ import {
   fetchUserIdByUsername,
 } from "@/app/middleware/apiMiddleware";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
 
 const AddTagPage = () => {
   const { data: session } = useSession();
   const [authorId, setAuthorId] = useState<number | null>(null);
-
+  const router = useRouter();
   const authorUsername = session?.user!.email;
 
   // Fetch the user ID once the username is available
@@ -51,6 +52,9 @@ const AddTagPage = () => {
     try {
       const newTag = await AddNewTag(tagData);
       console.log("New Tag Added:", newTag);
+      setTimeout(() => {
+        router.push("/tags");
+      }, 2000);
     } catch (error) {
       console.error("Error adding category:");
     }

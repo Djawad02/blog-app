@@ -1,4 +1,5 @@
 "use client";
+import blogSchema from "@/app/api/blogs/schema";
 import {
   fetchUserIdByUsername,
   getBlogs,
@@ -6,8 +7,11 @@ import {
 } from "@/app/middleware/apiMiddleware";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast
 const EditBlogPage = () => {
+  const router = useRouter();
   const [selectedBlogId, setSelectedBlogId] = useState<number | undefined>(
     undefined
   );
@@ -26,6 +30,7 @@ const EditBlogPage = () => {
   const { data: session } = useSession();
   const authorUsername = session?.user!.email;
   const [authorId, setAuthorId] = useState<number | null>(null);
+  const [errors, setErrors] = useState<string | null>(null);
   // Fetch blogs from the database
   const fetchBlogs = async () => {
     try {
@@ -80,6 +85,24 @@ const EditBlogPage = () => {
 
   const handleEditBlog = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors(null); // Reset errors
+    const blogData = {
+      title: blogTitle,
+      content: blogContent,
+      authorId: authorId ?? 1,
+      imagePath: blogImagePath,
+    };
+
+    // Validate blogData using blogSchema
+    const validation = blogSchema.safeParse(blogData);
+    if (!validation.success) {
+      const errorMessages = validation.error.errors
+        .map((err) => err.message)
+        .join(", ");
+      setErrors(errorMessages);
+      toast.error("Error!");
+      return;
+    }
     if (selectedBlogId) {
       try {
         const updatedBlog = await UpdateBlog(selectedBlogId, {
@@ -89,6 +112,11 @@ const EditBlogPage = () => {
           imagePath: blogImagePath,
         });
         console.log("Updated blog:", updatedBlog);
+        setErrors(null);
+        toast.success("Blog updated successfully!");
+        setTimeout(() => {
+          router.push("/blogs");
+        }, 2000);
       } catch (error) {
         console.error("Error updating blog:", error);
       }
@@ -152,7 +180,7 @@ const EditBlogPage = () => {
             placeholder="Image Path"
             className="w-full mt-4 p-2 border border-gray-300 rounded-md"
           />
-
+          {errors && <p className="text-red-500 mt-2">{errors}</p>}
           <button
             type="submit"
             className="mt-4 w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-300 transition duration-200"
@@ -174,6 +202,7 @@ const EditBlogPage = () => {
             Manage Tags
           </button>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const tagSchema = z.object({
   name: z.string()
-    .min(1, "Tag name is required")
+    .min(5, "Tag name must be atleast 5 characters")
     .max(255, "Tag name must be 255 characters or less")
     .refine(async (value) => {
       // Check if the tag name already exists in the database

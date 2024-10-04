@@ -1,5 +1,6 @@
 "use client";
 import { DeleteTag, getTags } from "@/app/middleware/apiMiddleware";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const DeleteTagPage = () => {
@@ -7,7 +8,7 @@ const DeleteTagPage = () => {
     undefined
   );
   const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
-
+  const router = useRouter();
   // Fetch categories from the database
   const fetchTags = async () => {
     try {
@@ -26,6 +27,9 @@ const DeleteTagPage = () => {
     try {
       const deletedTag = await DeleteTag(tagId);
       console.log(deletedTag);
+      setTimeout(() => {
+        router.push("/tags");
+      }, 2000);
     } catch (error) {
       console.error("Error adding tag:");
     }

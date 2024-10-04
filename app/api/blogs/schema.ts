@@ -1,8 +1,8 @@
 import {z} from 'zod';
 
 const blogSchema = z.object({
-  title: z.string().min(1, "Title is required").max(255, "Title must be 255 characters or less"),
-  content: z.string().min(1, "Content is required"),
+  title: z.string().min(5, "Title must be atleast 5 characters").max(255, "Title must be 255 characters or less"),
+  content: z.string().min(5, "Content must be atleast 5 characters"),
   authorId: z.number().int().nonnegative("Author ID must be a positive integer"),
   imagePath: z.string().nullable().optional().refine((value) => {
     if (!value) return true; // If the field is null or undefined, it's valid
@@ -14,7 +14,7 @@ const blogSchema = z.object({
   
     return (isValidUrl || isRelativePath) && isValidLength;
   }, {
-    message: "Image path must be a valid URL or relative path, and less than or equal to 255 characters",
+    message: "Image path must be a valid URL or relative path, and less than or equal to 255 characters or leave empty",
   }),
 });
 
