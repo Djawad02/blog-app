@@ -64,8 +64,6 @@ const AddBlogPage = () => {
       return;
     }
 
-    console.log("Blog Data:", blogData);
-
     try {
       const newBlog = await AddNewBlog(blogData);
       console.log("New Blog Added:", newBlog);
