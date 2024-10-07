@@ -7,11 +7,12 @@ import {
   removeTagFromBlog,
 } from "@/app/middleware/apiMiddleware";
 import { useSearchParams } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast
 
 const ManageTags = () => {
   const searchParams = useSearchParams();
   const blogId = searchParams.get("id");
-  console.log(blogId);
 
   const [allTags, setAllTags] = useState<Tag[]>([]);
   const [selectedTagId, setSelectedTagId] = useState<number | string>("");
@@ -57,7 +58,7 @@ const ManageTags = () => {
         if (!response.success) {
           throw new Error("Failed to add tag");
         }
-
+        toast.success("Tag added successfully!");
         fetchAssociatedTags();
       } catch (error) {
         console.error("Error adding tag:", error);
@@ -75,7 +76,7 @@ const ManageTags = () => {
         if (!response.success) {
           throw new Error("Failed to remove tag");
         }
-
+        toast.success("Tag removed successfully!");
         fetchAssociatedTags();
       } catch (error) {
         console.error("Error removing tag:", error);
@@ -97,7 +98,7 @@ const ManageTags = () => {
           <h1 className="text-xl font-semibold text-center mb-4">
             Blog ID: {blogId}
           </h1>
-          <h2 className="mt-6 font-bold">Currently Associated Categories:</h2>
+          <h2 className="mt-6 font-bold">Currently Associated Tags:</h2>
           <ul>
             {associatedtags.map((tId) => {
               const tag = allTags.find((tt) => tt.id === tId);
@@ -160,6 +161,7 @@ const ManageTags = () => {
               Remove Tag
             </button>
           </div>
+          <ToastContainer />
         </form>
       </div>
     </div>

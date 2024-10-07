@@ -7,12 +7,11 @@ import {
   removeCategoryFromBlog,
 } from "@/app/middleware/apiMiddleware";
 import { useSearchParams } from "next/navigation";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast
 const ManageCategories = () => {
   const searchParams = useSearchParams();
   const blogId = searchParams.get("id");
-  console.log(blogId);
-
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>(
     ""
@@ -63,7 +62,7 @@ const ManageCategories = () => {
         if (!response.success) {
           throw new Error("Failed to add category");
         }
-
+        toast.success("Category added successfully!");
         fetchAssociatedCategories();
       } catch (error) {
         console.error("Error adding category:", error);
@@ -81,7 +80,7 @@ const ManageCategories = () => {
         if (!response.success) {
           throw new Error("Failed to remove category");
         }
-
+        toast.success("Category removed successfully!");
         fetchAssociatedCategories();
       } catch (error) {
         console.error("Error removing category:", error);
@@ -172,6 +171,7 @@ const ManageCategories = () => {
               Remove Category
             </button>
           </div>
+          <ToastContainer />
         </form>
       </div>
     </div>

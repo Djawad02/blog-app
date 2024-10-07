@@ -33,20 +33,25 @@ export async function GET(
 
 export const DELETE = async (
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } // id refers to blogId here
 ) => {
-  const { id } = params;
+  const { id: blogId } = params; // This is the blogId
+  const { categoryId } = await req.json(); // Parsing the categoryId from the request body
 
   try {
-    const categoryId = parseInt(id);
-    if (isNaN(categoryId)) {
-      return new Response("Invalid ID", { status: 400 });
+    const parsedBlogId = parseInt(blogId);
+    const parsedCategoryId = parseInt(categoryId);
+
+    // Validate both blogId and categoryId
+    if (isNaN(parsedBlogId) || isNaN(parsedCategoryId)) {
+      return new Response("Invalid blogId or categoryId", { status: 400 });
     }
 
-    // Delete the category from the blog
+    // Delete the association between the blog and the category
     await prisma.blogs_categories.deleteMany({
       where: {
-        categoryId: categoryId,
+        blogId: parsedBlogId,
+        categoryId: parsedCategoryId,
       },
     });
 
