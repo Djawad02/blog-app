@@ -2,7 +2,7 @@
 import Author from "@/app/components/Author";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import blogImagePlaceholder from "../../../public/images/nextJs.png";
+import blogImagePlaceholder from "../../../public/images/nextJs.jpg";
 import RelatedSection from "@/app/components/RelatedSection";
 import { useParams } from "next/navigation";
 import { getBlogById } from "@/app/middleware/apiMiddleware";

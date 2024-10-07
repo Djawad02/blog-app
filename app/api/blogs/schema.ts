@@ -1,7 +1,7 @@
 import {z} from 'zod';
 
 const blogSchema = z.object({
-  title: z.string().min(5, "Title must be atleast 5 characters").max(255, "Title must be 255 characters or less"),
+  title: z.string().min(2, "Title must be atleast 2 characters").max(255, "Title must be 255 characters or less"),
   content: z.string().min(5, "Content must be atleast 5 characters"),
   authorId: z.number().int().nonnegative("Author ID must be a positive integer"),
   imagePath: z.string().nullable().optional().refine((value) => {
