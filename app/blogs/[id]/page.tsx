@@ -38,7 +38,13 @@ const IndividualBlog = () => {
         day: "numeric",
       })
     : "No date available"; // Fallback for missing date
-
+  const formattedUpdateDate = blogData.updatedAt
+    ? new Date(blogData.updatedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "No date available"; // Fallback for missing date
   return (
     <main>
       <section className="container mx-auto md:px-2 py-16 w-1/2">
@@ -46,12 +52,18 @@ const IndividualBlog = () => {
           <Author authorId={blogData.authorId} />
         </div>
         <div className="flex items-center justify-center">
-          <p className="text-gray-500 text-sm flex items-center">
+          <div className="text-gray-500 text-sm flex items-center">
             <span className="text-red-500 hover:text-red-800 mr-2">
               4 min read
             </span>
             <span>- {formattedDate}</span>
-          </p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center text-sm font-bold">
+          <br /> Last modified:
+          <span className="text-red-800 mr-4 px-1 font-normal">
+            <br /> {formattedUpdateDate}
+          </span>
         </div>
 
         <div className="blog py-10">

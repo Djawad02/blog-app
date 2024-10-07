@@ -62,30 +62,28 @@ const Post = ({ post }: { post: PostType }) => {
             src={post.imagePath || blogImage}
             alt="Image"
             className="rounded"
-            width={400}
-            height={250}
+            width={450}
+            height={350}
           />
         </Link>
       </div>
       <div className="info flex justify-center flex-col">
         <div className="cat">
-          {/* You can add category links here if needed */}
-          <Link href="/" className="text-gray-500 hover:text-gray-800 text-sm">
-            - {new Date(post.createdAt).toLocaleDateString()}
-          </Link>
-        </div>
-        <div className="title">
           <Link
             href={`/blogs/${post.id}`}
             className="text-lg font-bold text-gray-800 hover:text-gray-500"
           >
             {post.title}
           </Link>
+          <Link href="/" className="text-gray-500 hover:text-gray-800 text-sm">
+            {""} - {new Date(post.createdAt).toLocaleDateString()}
+          </Link>
         </div>
-        <p className="text-gray-500 py-3 text-sm">
+        {/* <div className="title"></div> */}
+        <div className="text-gray-500 py-3 text-sm">
           {post.content.slice(0, 100)}...
-        </p>
-        <Author authorId={post.authorId} />
+          <Author authorId={post.authorId} />
+        </div>
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       take: limit,
       where: whereClause, // Apply filters
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
       include: {
         categories: {
