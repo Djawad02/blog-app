@@ -5,10 +5,14 @@ import {
   fetchCategoriesForBlog,
   getCategories,
   removeCategoryFromBlog,
+  AddNewCategory,
+  fetchUserIdByUsername,
 } from "@/app/middleware/apiMiddleware";
 import { useSearchParams } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast
+import { useSession } from "next-auth/react";
+
 const ManageCategories = () => {
   const searchParams = useSearchParams();
   const blogId = searchParams.get("id");
@@ -16,9 +20,27 @@ const ManageCategories = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>(
     ""
   );
+
   const [associatedCategories, setAssociatedCategories] = useState<number[]>(
     []
   );
+
+  const { data: session } = useSession();
+  const [authorId, setAuthorId] = useState<number | null>(null);
+  const authorUsername = session?.user?.email;
+
+  const [newCategoryName, setNewCategoryName] = useState("");
+
+  // Fetch the user ID once the username is available
+  useEffect(() => {
+    const getUserId = async () => {
+      if (authorUsername) {
+        const id = await fetchUserIdByUsername(authorUsername);
+        setAuthorId(id);
+      }
+    };
+    getUserId();
+  }, [authorUsername]);
 
   // Fetch all categories from the database
   const fetchCategories = async () => {
@@ -88,6 +110,30 @@ const ManageCategories = () => {
     }
   };
 
+  const handleCreateCategory = async () => {
+    if (authorId === null) {
+      toast.error("Author ID is not available.");
+      return; // Exit the function if authorId is null
+    }
+    try {
+      const categoryData = {
+        name: newCategoryName,
+        authorId: authorId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const response = await AddNewCategory(categoryData);
+
+      toast.success("New category created successfully!");
+      setNewCategoryName(""); // Clear the input field after submission
+      fetchCategories(); // Fetch updated categories list
+    } catch (error) {
+      console.error("Error creating category:", error);
+      toast.error("Failed to create category");
+    }
+  };
+
   // Filter to get categories that are not associated for adding
   const categoriesForAdding = allCategories.filter(
     (cat) => !associatedCategories.includes(cat.id)
@@ -97,6 +143,11 @@ const ManageCategories = () => {
   const categoriesForRemoving = allCategories.filter((cat) =>
     associatedCategories.includes(cat.id)
   );
+
+  // Handle loading states for session and authorId
+  if (!session || authorId === null) {
+    return <div>Please wait. Loading...</div>;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -108,6 +159,7 @@ const ManageCategories = () => {
           <h1 className="text-xl font-semibold text-center mb-4">
             Blog ID: {blogId}
           </h1>
+
           <h2 className="mt-6 font-bold">Currently Associated Categories:</h2>
           <ul>
             {associatedCategories.map((catId) => {
@@ -115,6 +167,7 @@ const ManageCategories = () => {
               return category && <li key={catId}>{category.name}</li>;
             })}
           </ul>
+
           {/* Dropdown for selecting category to add */}
           <select
             value={selectedCategoryId || ""}
@@ -132,17 +185,14 @@ const ManageCategories = () => {
             ))}
           </select>
 
-          {/* Buttons for adding and removing categories */}
-          <div className="mt-4">
-            <div className="mt-4 flex justify-center">
-              <button
-                type="button" // Prevent default form submission
-                onClick={handleAddCategory}
-                className="mr-2 p-2 bg-red-400 hover:bg-red-300 text-white rounded-md items-center"
-              >
-                Add Category
-              </button>
-            </div>
+          <div className="mt-4 flex justify-center">
+            <button
+              type="button"
+              onClick={handleAddCategory}
+              className="mr-2 p-2 bg-red-400 hover:bg-red-300 text-white rounded-md items-center"
+            >
+              Add Category
+            </button>
           </div>
 
           {/* Dropdown for selecting category to remove */}
@@ -162,15 +212,38 @@ const ManageCategories = () => {
               </option>
             ))}
           </select>
+
           <div className="mt-4 flex justify-center">
             <button
               type="button"
               onClick={handleRemoveCategory}
-              className="mr-2 p-2 bg-red-400  hover:bg-red-300 text-white rounded-md"
+              className="mr-2 p-2 bg-red-400 hover:bg-red-300 text-white rounded-md"
             >
               Remove Category
             </button>
           </div>
+
+          {/* New Category Form */}
+          <h2 className="mt-6 font-bold">Create New Category:</h2>
+          <input
+            type="text"
+            value={newCategoryName}
+            onChange={(e) => setNewCategoryName(e.target.value)}
+            placeholder="Category Name"
+            className="w-full p-2 border border-gray-300 rounded-md mt-2"
+            required
+          />
+
+          <div className="mt-4 flex justify-center">
+            <button
+              type="button"
+              onClick={handleCreateCategory}
+              className="mr-2 p-2 bg-red-500 hover:bg-red-400 text-white rounded-md"
+            >
+              Create Category
+            </button>
+          </div>
+
           <ToastContainer />
         </form>
       </div>
